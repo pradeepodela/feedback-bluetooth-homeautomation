@@ -1,0 +1,188 @@
+const int pushButton[] ={2,3,4,5};
+
+const int relayPin[]={11,10,9,8};
+
+String relayNames[] ={"CH1", "CH2","CH3","CH4"};
+
+int pushed[] ={0,0,0,0};
+
+int relayStatus[] ={HIGH,HIGH,HIGH,HIGH};
+
+
+
+
+
+void setup() {
+
+ 
+
+  Serial.begin(9600);// initialize serial monitor 
+
+  for(int i=0; i<4; i++)
+
+  {
+
+    pinMode(pushButton[i], INPUT_PULLUP); 
+
+    pinMode(relayPin[i], OUTPUT);   
+
+    digitalWrite(relayPin[i], HIGH);// initial relay status to be OFF
+
+  }
+
+
+
+
+
+}
+
+
+
+void loop() {
+
+
+
+
+
+
+
+
+
+  if(Serial.available() > 0)  
+
+  {
+
+    String input = Serial.readString();         //Read the incoming data as String an storing it in a var (input)
+
+    if (input == '1:1')// comparing them and onning the relay
+
+    {
+
+      digitalWrite(relayPin[1],HIGH);
+
+    }
+
+    if (input == '1:0')
+
+    {
+
+      digitalWrite(relayPin[1],LOW);
+
+    }
+
+    if (input == '2:1')
+
+    {
+
+      digitalWrite(relayPin[2],HIGH);
+
+    }
+
+    if (input == '2:0')
+
+    {
+
+      digitalWrite(relayPin[2],LOW);
+
+    }
+
+    if (input == '3:1')
+
+    {
+
+      digitalWrite(relayPin[3],HIGH);
+
+    }
+
+    if (input == '3:0')
+
+    {
+
+      digitalWrite(relayPin[3],LOW);
+
+    }
+
+    if (input == '4:1')
+
+    {
+
+      digitalWrite(relayPin[4],HIGH);
+
+    }
+
+    if (input == '4:0')
+
+    {
+
+      digitalWrite(relayPin[4],LOW);
+
+    }
+
+    
+
+} 
+
+
+
+
+
+  for(int i=0; i<4; i++)
+
+  {
+
+     int  val = digitalRead(pushButton[i]);   
+
+    if(val == HIGH && relayStatus[i] == LOW){
+
+  
+
+      pushed[i] = 1-pushed[i];
+
+      delay(100);
+
+    }   
+
+
+
+  relayStatus[i] = val;
+
+
+
+      if(pushed[i] == HIGH){
+
+        Serial.print(relayNames[i]);
+
+        Serial.print(" ON");
+
+        digitalWrite(relayPin[i], LOW);
+
+        Serial.write(relayPin[i]); 
+
+       
+
+      }else{
+
+        Serial.print(relayNames[i]);
+
+        Serial.print(" OFF");
+
+        digitalWrite(relayPin[i], HIGH);
+
+        Serial.write(relayPin[i]);
+
+   
+
+      } 
+
+ 
+
+  }
+
+     
+
+  delay(1000);// change the value to (100) while you are testing it practically with components 
+
+  
+
+
+}
